@@ -25,7 +25,7 @@ router.get("/", async (req, res, next) => {
   try {
     const { status, priority } = req.query;
 
-    const where: any = { userId: req.user!.id };
+    const where: any = { userId: req.user!.userId };
     if (status) where.status = status;
     if (priority) where.priority = priority;
 
@@ -45,7 +45,7 @@ router.get("/:id", async (req, res, next) => {
   try {
     const id = parseInt(req.params.id);
     const task = await prisma.task.findFirst({
-      where: { id, userId: req.user!.id },
+      where: { id, userId: req.user!.userId },
     });
 
     if (!task) {
@@ -67,14 +67,14 @@ router.post("/", async (req, res, next) => {
       data: {
         ...data,
         dueDate: data.dueDate ? new Date(data.dueDate) : null,
-        userId: req.user!.id,
+        userId: req.user!.userId,
       },
     });
 
     res.status(201).json(task);
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return res.status(400).json({ errors: error.errors });
+      return res.status(400).json({ error: "Validation failed", issues: error.issues });
     }
     next(error);
   }
@@ -88,7 +88,7 @@ router.put("/:id", async (req, res, next) => {
 
     // Check if task belongs to user
     const existing = await prisma.task.findFirst({
-      where: { id, userId: req.user!.id },
+      where: { id, userId: req.user!.userId },
     });
 
     if (!existing) {
@@ -106,7 +106,7 @@ router.put("/:id", async (req, res, next) => {
     res.json(task);
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return res.status(400).json({ errors: error.errors });
+      return res.status(400).json({ error: "Validation failed", issues: error.issues });
     }
     next(error);
   }
@@ -119,7 +119,7 @@ router.delete("/:id", async (req, res, next) => {
 
     // Check if task belongs to user
     const existing = await prisma.task.findFirst({
-      where: { id, userId: req.user!.id },
+      where: { id, userId: req.user!.userId },
     });
 
     if (!existing) {

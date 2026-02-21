@@ -77,8 +77,6 @@ router.get("/me", authenticate, async (req, res) => {
       username: true,
       email: true,
       role: true,
-      dailyCalorieGoal: true,
-      dailyProteinGoal: true,
     },
   });
 
@@ -86,34 +84,6 @@ router.get("/me", authenticate, async (req, res) => {
     res.status(404).json({ error: "User not found" });
     return;
   }
-
-  res.json(user);
-});
-
-// PUT /auth/profile
-const profileSchema = z.object({
-  dailyCalorieGoal: z.number().int().positive().nullable().optional(),
-  dailyProteinGoal: z.number().int().positive().nullable().optional(),
-});
-
-router.put("/profile", authenticate, validate(profileSchema), async (req, res) => {
-  const { dailyCalorieGoal, dailyProteinGoal } = req.body;
-
-  const user = await prisma.user.update({
-    where: { id: req.user!.userId },
-    data: {
-      ...(dailyCalorieGoal !== undefined && { dailyCalorieGoal }),
-      ...(dailyProteinGoal !== undefined && { dailyProteinGoal }),
-    },
-    select: {
-      id: true,
-      username: true,
-      email: true,
-      role: true,
-      dailyCalorieGoal: true,
-      dailyProteinGoal: true,
-    },
-  });
 
   res.json(user);
 });
