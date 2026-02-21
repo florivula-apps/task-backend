@@ -2,6 +2,7 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import authRouter from "./routes/auth";
+import tasksRouter from "./routes/tasks";
 import { authenticate } from "./middleware/auth";
 import { errorHandler } from "./middleware/errorHandler";
 
@@ -20,7 +21,7 @@ app.use("/auth", authRouter);
 
 // Protected routes (add your routes below)
 app.use(authenticate);
-// Example: app.use("/items", itemsRouter);
+app.use("/tasks", tasksRouter);
 
 app.use(errorHandler);
 

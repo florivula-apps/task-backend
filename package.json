@@ -1,7 +1,7 @@
 {
-  "name": "app-backend",
+  "name": "task-backend",
   "version": "1.0.0",
-  "description": "Node.js + Express + Prisma backend template",
+  "description": "Task management app - backend",
   "main": "dist/index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",
