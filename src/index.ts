@@ -17,11 +17,11 @@ app.get("/health", (_req, res) => {
 });
 
 // Public routes
-app.use("/auth", authRouter);
+app.use("/api/auth", authRouter);
 
 // Protected routes (add your routes below)
 app.use(authenticate);
-app.use("/tasks", tasksRouter);
+app.use("/api/tasks", tasksRouter);
 
 app.use(errorHandler);
 
